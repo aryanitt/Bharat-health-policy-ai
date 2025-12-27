@@ -1,0 +1,16 @@
+langchain-openai
+langchain-core
+langchain_community
+
+streamlit
+langchainhub
+wikipedia
+arxiv
+pypdf
+PyPDF2
+langserve
+sse_starlette
+chromadb
+faiss-cpu
+google-generativeai
+langchain-groq
