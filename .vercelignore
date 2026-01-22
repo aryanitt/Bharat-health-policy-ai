@@ -11,7 +11,7 @@ node_modules
 
 # Large documentation files (using api/all_docs instead)
 /all_docs/
-/data/
+
 
 # Tests
 tests/
