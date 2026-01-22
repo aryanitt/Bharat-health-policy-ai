@@ -3,6 +3,8 @@
 Bharat Health Policy Genius is an AI-powered assistant designed to help users understand India’s key health schemes such as **Ayushman Bharat**, **PM-JAY**, and **National Health Mission**.  
 It uses **RAG (Retrieval-Augmented Generation)** with official government PDFs to provide accurate, reliable answers.
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/aryanitt/Bharat-health-policy-ai)
+
 ---
 
 ## 📸 Project Preview
