@@ -57,7 +57,12 @@ async function sendMessage(text) {
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            let errorDetail = 'Network response was not ok';
+            try {
+                const errData = await response.json();
+                errorDetail = errData.detail || errorDetail;
+            } catch (e) { }
+            throw new Error(errorDetail);
         }
 
         const data = await response.json();
@@ -72,7 +77,7 @@ async function sendMessage(text) {
 
     } catch (error) {
         console.error('Error:', error);
-        addMessage("⚠️ Sorry, I'm having trouble connecting to the server. (It might be waking up!)", 'bot');
+        addMessage(`⚠️ Error: ${error.message}`, 'bot');
     } finally {
         loading.classList.add('hidden');
     }
