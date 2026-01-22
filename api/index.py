@@ -4,17 +4,17 @@ from typing import List, Optional
 import os
 from dotenv import load_dotenv
 
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_community.vectorstores import FAISS
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-# from langchain_huggingface import HuggingFaceEmbeddings # Removed to save space
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
-from langchain_groq import ChatGroq
-from langchain_community.tools import WikipediaQueryRun, ArxivQueryRun
-from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
-from langchain.agents import create_react_agent, AgentExecutor
-from langchain.tools.retriever import create_retriever_tool
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+# Imports moved to functions for lazy loading
+# from langchain_community.document_loaders import PyPDFLoader
+# from langchain_community.vectorstores import FAISS
+# from langchain_text_splitters import RecursiveCharacterTextSplitter
+# from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+# from langchain_groq import ChatGroq
+# from langchain_community.tools import WikipediaQueryRun, ArxivQueryRun
+# from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
+# from langchain.agents import create_react_agent, AgentExecutor
+# from langchain.tools.retriever import create_retriever_tool
+# from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 load_dotenv()
 
@@ -30,6 +30,7 @@ class ChatRequest(BaseModel):
 
 
 def get_embeddings():
+    from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
     global EMBEDDINGS
     if EMBEDDINGS is None:
         # Use API based embeddings (Lightweight)
@@ -45,6 +46,9 @@ def get_embeddings():
     return EMBEDDINGS
 
 def get_vector_store():
+    from langchain_community.document_loaders import PyPDFLoader
+    from langchain_community.vectorstores import FAISS
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
     global VECTOR_DB
     if VECTOR_DB is None:
         embedding = get_embeddings()
@@ -82,6 +86,12 @@ def health_check():
 
 @app.post("/api/chat")
 async def chat(request: ChatRequest):
+    from langchain_community.tools import WikipediaQueryRun, ArxivQueryRun
+    from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
+    from langchain.agents import create_react_agent, AgentExecutor
+    from langchain.tools.retriever import create_retriever_tool
+    from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+    from langchain_groq import ChatGroq
     try:
         vectordb = get_vector_store()
         
@@ -151,6 +161,8 @@ async def chat(request: ChatRequest):
 
 @app.post("/api/upload")
 async def upload_file(files: List[UploadFile] = File(...)):
+    from langchain_community.document_loaders import PyPDFLoader
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
     try:
         global VECTOR_DB
         if VECTOR_DB is None:

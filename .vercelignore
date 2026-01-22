@@ -10,8 +10,8 @@ node_modules
 *.ipynb
 
 # Large documentation files (using api/all_docs instead)
-all_docs/
-data/
+/all_docs/
+/data/
 
 # Tests
 tests/
