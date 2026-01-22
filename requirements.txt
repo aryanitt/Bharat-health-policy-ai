@@ -4,6 +4,7 @@ langchain-community
 fastapi
 uvicorn
 python-multipart
+python-dotenv
 wikipedia
 arxiv
 pypdf
