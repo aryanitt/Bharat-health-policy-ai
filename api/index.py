@@ -16,6 +16,19 @@ from langchain.agents import create_react_agent, AgentExecutor
 from langchain.tools.retriever import create_retriever_tool
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
+load_dotenv()
+
+app = FastAPI()
+
+# Globals
+EMBEDDINGS = None
+VECTOR_DB = None
+
+class ChatRequest(BaseModel):
+    message: str
+    history: List[dict] = []
+
+
 def get_embeddings():
     global EMBEDDINGS
     if EMBEDDINGS is None:
