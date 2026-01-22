@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Health Policy Genius | Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="style.css?v=2">
+    <style>
+        .cms-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            background: white;
+        }
+
+        .cms-item:last-child {
+            border-bottom: none;
+        }
+
+        .cms-item .actions button {
+            margin-left: 10px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .cms-item .actions button.danger {
+            color: red;
+            border-color: red;
+            background: #fff0f0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero-section" style="padding: 40px 20px; background: white;">
+        <div class="hero-content">
+            <h1>CMS Dashboard</h1>
+            <p>Manage content for the platform.</p>
+        </div>
+    </section>
+
+    <div class="features-section">
+        <div id="admin-content"
+            style="max-width: 800px; margin: 0 auto; background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border);">
+            <p>Loading...</p>
+        </div>
+    </div>
+
+    <script src="js/nav.js"></script>
+    <script src="js/cms.js"></script>
+</body>
+
+</html>

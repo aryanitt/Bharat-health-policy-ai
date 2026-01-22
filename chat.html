@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharat Health Policy Genius</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=2">
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-area">
+                <span class="icon">🩺</span>
+                <h1>Health Policy AI</h1>
+            </div>
+
+            <div class="nav-section">
+                <h3>Quick Questions</h3>
+                <div class="questions-list" id="quick-questions">
+                    <button class="q-btn" data-query="What is Ayushman Bharat PM-JAY?">What is Ayushman Bharat?</button>
+                    <button class="q-btn" data-query="What benefits are covered under PM-JAY?">PM-JAY Benefits</button>
+                    <button class="q-btn" data-query="How can a rural citizen apply?">Rural Application Process</button>
+                    <button class="q-btn" data-query="What documents are required?">Required Documents</button>
+                </div>
+            </div>
+
+            <div class="nav-section bottom">
+                <p>Powered by Gov PDFs + Wikipedia</p>
+                <button id="upload-btn-trigger" class="upload-trigger"
+                    style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 10px; background: var(--bg-body); border: 1px dashed var(--border); border-radius: 8px; cursor: pointer; color: var(--text-muted); font-size: 14px;">
+                    <ion-icon name="cloud-upload-outline" style="font-size: 18px;"></ion-icon>
+                    <span>Upload New PDF</span>
+                </button>
+                <input type="file" id="pdf-upload" multiple hidden accept="application/pdf">
+            </div>
+        </aside>
+
+        <!-- Main Chat -->
+        <main class="chat-area">
+            <header class="chat-header">
+                <h2>Bharat Health Policy Genius</h2>
+                <p>AI Assistant for Indian Health Schemes (AB-PMJAY, NHM)</p>
+            </header>
+
+            <div class="messages-container" id="messages">
+                <!-- Welcome Message -->
+                <div class="message bot">
+                    <div class="avatar">🤖</div>
+                    <div class="bubble">
+                        <p>Namaste! I am your AI Health Policy Assistant. Ask me anything about Ayushman Bharat, PM-JAY,
+                            or NHM.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <input type="text" id="user-input" placeholder="Ask a question about health policies..."
+                        autocomplete="off">
+                    <button id="send-btn">
+                        <ion-icon name="send"></ion-icon>
+                    </button>
+                </div>
+                <div class="loading-indicator hidden" id="loading">
+                    <span>Thinking...</span>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/nav.js"></script>
+    <script src="script.js?v=2"></script>
+</body>
+
+</html>

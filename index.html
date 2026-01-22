@@ -1,77 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bharat Health Policy Genius</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Bharat Health Policy Genius | Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
+
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo-area">
-                <span class="icon">🩺</span>
-                <h1>Health Policy AI</h1>
-            </div>
-            
-            <div class="nav-section">
-                <h3>Quick Questions</h3>
-                <div class="questions-list" id="quick-questions">
-                    <button class="q-btn" data-query="What is Ayushman Bharat PM-JAY?">What is Ayushman Bharat?</button>
-                    <button class="q-btn" data-query="What benefits are covered under PM-JAY?">PM-JAY Benefits</button>
-                    <button class="q-btn" data-query="How can a rural citizen apply?">Rural Application Process</button>
-                    <button class="q-btn" data-query="What documents are required?">Required Documents</button>
-                </div>
-            </div>
 
-            <div class="nav-section bottom">
-                <p>Powered by Gov PDFs + Wikipedia</p>
-                <!-- Upload temporarily disabled for Vercel static -->
-                <!-- <button id="upload-btn-trigger" class="upload-trigger">
-                    <ion-icon name="cloud-upload-outline"></ion-icon> Upload PDF
-                </button> -->
-                <input type="file" id="pdf-upload" multiple hidden>
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="hero-content">
+            <h1>India's Health Schemes,<br>Simplified by AI.</h1>
+            <p>Get instant, accurate answers about Ayushman Bharat, PM-JAY, and National Health Mission directly from
+                official government documents.</p>
+            <div class="hero-actions">
+                <a href="chat.html" class="btn btn-primary">
+                    <ion-icon name="chatbubbles"></ion-icon> Start AI Chat
+                </a>
+                <a href="videos.html" class="btn btn-secondary">
+                    <ion-icon name="play-circle"></ion-icon> Watch Tutorials
+                </a>
             </div>
-        </aside>
-
-        <!-- Main Chat -->
-        <main class="chat-area">
-            <header class="chat-header">
-                <h2>Bharat Health Policy Genius</h2>
-                <p>AI Assistant for Indian Health Schemes (AB-PMJAY, NHM)</p>
-            </header>
-
-            <div class="messages-container" id="messages">
-                <!-- Welcome Message -->
-                <div class="message bot">
-                    <div class="avatar">🤖</div>
-                    <div class="bubble">
-                        <p>Namaste! I am your AI Health Policy Assistant. Ask me anything about Ayushman Bharat, PM-JAY, or NHM.</p>
-                    </div>
-                </div>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card">
+                <h3>55 Cr+</h3>
+                <p>Eligible Citizens</p>
             </div>
-
-            <div class="input-area">
-                <div class="input-wrapper">
-                    <input type="text" id="user-input" placeholder="Ask a question about health policies..." autocomplete="off">
-                    <button id="send-btn">
-                        <ion-icon name="send"></ion-icon>
-                    </button>
-                </div>
-                <div class="loading-indicator hidden" id="loading">
-                    <span>Thinking...</span>
-                </div>
+            <div class="stat-card">
+                <h3>₹5 Lakhs</h3>
+                <p>Free Treatment/Year</p>
             </div>
-        </main>
-    </div>
+            <div class="stat-card">
+                <h3>24/7</h3>
+                <p>AI Support</p>
+            </div>
+        </div>
+    </header>
 
-    <script src="script.js"></script>
+    <!-- Features Grid -->
+    <section class="features-section">
+        <h2>What would you like to do?</h2>
+        <div class="features-grid">
+            <a href="schemes.html" class="feature-card">
+                <div class="icon-box"><ion-icon name="book"></ion-icon></div>
+                <h3>Explore Schemes</h3>
+                <p>Browse details of all major health policies.</p>
+            </a>
+            <a href="eligibility.html" class="feature-card">
+                <div class="icon-box"><ion-icon name="checkmark-circle"></ion-icon></div>
+                <h3>Check Eligibility</h3>
+                <p>Find out if you qualify for benefits.</p>
+            </a>
+            <a href="hospitals.html" class="feature-card">
+                <div class="icon-box"><ion-icon name="medkit"></ion-icon></div>
+                <h3>Find Hospitals</h3>
+                <p>Locate empaneled hospitals near you.</p>
+            </a>
+            <a href="videos.html" class="feature-card">
+                <div class="icon-box"><ion-icon name="videocam"></ion-icon></div>
+                <h3>Video Hub</h3>
+                <p>Watch simplified explainers in your language.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="about-text">
+            <h2>Trust & Transparency</h2>
+            <p>Bharat Health Policy Genius uses <strong>RAG (Retrieval-Augmented Generation)</strong> technology. Every
+                answer provided by our AI is grounded in official PDFs sourced from the Ministry of Health and Family
+                Welfare (MoHFW).</p>
+            <div class="source-logos">
+                <span>🏛️ Official PDFs</span>
+                <span>🔒 Secure & Private</span>
+                <span>🇮🇳 Made for India</span>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/nav.js"></script>
 </body>
+
 </html>

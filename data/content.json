@@ -1,0 +1,64 @@
+{
+    "videos": [
+        {
+            "id": "v1",
+            "youtube_id": "SToefGBjhbM",
+            "title": "All about Ayushman Bharat Scheme",
+            "description": "Eligibility, Application Process & Benefits Explained.",
+            "category": "Explained",
+            "lang": "English/Hindi"
+        },
+        {
+            "id": "v2",
+            "youtube_id": "uVxi8wLvu8k",
+            "title": "Ayushman Bharat Card: 16 FAQs",
+            "description": "Answers to common questions about eligibility and hospitals.",
+            "category": "FAQ",
+            "lang": "English"
+        },
+        {
+            "id": "v3",
+            "youtube_id": "F88fu61LZp4",
+            "title": "Top 5 Govt ID Cards for Benefits",
+            "description": "Overview of essential government cards including Ayushman Bharat.",
+            "category": "Overview",
+            "lang": "Hindi"
+        }
+    ],
+    "schemes": [
+        {
+            "id": "s1",
+            "name": "Ayushman Bharat PM-JAY",
+            "coverage": "₹5 Lakhs / Family / Year",
+            "beneficiaries": "SC/ST, Low Income, Rural",
+            "hospital_type": "Public & Empaneled Private",
+            "description": "Pradhan Mantri Jan Arogya Yojana provides health insurance for secondary and tertiary care hospitalization."
+        },
+        {
+            "id": "s2",
+            "name": "Pradhan Mantri Suraksha Bima Yojana",
+            "coverage": "₹2 Lakhs (Accidental Death)",
+            "beneficiaries": "All Bank Account Holders (18-70 yrs)",
+            "hospital_type": "Insurance Claim",
+            "description": "Accident insurance scheme offering coverage for accidental death and disability."
+        },
+        {
+            "id": "s3",
+            "name": "National Health Mission (NHM)",
+            "coverage": "Various Programs",
+            "beneficiaries": "Mothers, Children, Rural & Urban Poor",
+            "hospital_type": "Public Health Centers (PHC/CHC)",
+            "description": "NHM encompasses two sub-missions: National Rural Health Mission (NRHM) and National Urban Health Mission (NUHM)."
+        }
+    ],
+    "faqs": [
+        {
+            "question": "Is PM-JAY completely free?",
+            "answer": "Yes, for eligible beneficiaries, all costs of hospitalization are covered up to ₹5 Lakhs."
+        },
+        {
+            "question": "Does it cover pre-existing diseases?",
+            "answer": "Yes, PM-JAY covers all pre-existing conditions from Day 1."
+        }
+    ]
+}

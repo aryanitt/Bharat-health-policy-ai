@@ -95,3 +95,49 @@ quickQuestions.forEach(btn => {
         sendMessage(query);
     });
 });
+
+// File Upload Logic
+const uploadBtn = document.getElementById('upload-btn-trigger');
+const fileInput = document.getElementById('pdf-upload');
+
+if (uploadBtn && fileInput) {
+    uploadBtn.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', async (e) => {
+        if (e.target.files.length === 0) return;
+
+        const originalText = uploadBtn.innerHTML;
+        uploadBtn.innerHTML = '<ion-icon name="hourglass-outline"></ion-icon> Uploading...';
+        uploadBtn.style.opacity = '0.7';
+        uploadBtn.disabled = true;
+
+        const formData = new FormData();
+        for (let file of e.target.files) {
+            formData.append('files', file);
+        }
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                alert('Success: ' + data.message);
+                addMessage('I have processed your files. You can now ask questions about them.', 'bot');
+            } else {
+                alert('Error: ' + data.detail);
+            }
+        } catch (err) {
+            alert('Upload failed: ' + err.message);
+        } finally {
+            uploadBtn.innerHTML = originalText;
+            uploadBtn.style.opacity = '1';
+            uploadBtn.disabled = false;
+            fileInput.value = '';
+        }
+    });
+}

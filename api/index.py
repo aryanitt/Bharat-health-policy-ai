@@ -11,12 +11,25 @@ from langchain_huggingface import HuggingFaceEmbeddings
 
 from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper
 from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun
-from langchain.tools.retriever import create_retriever_tool
+# Polyfill for create_retriever_tool
+from langchain_core.tools import Tool
+
+def create_retriever_tool(retriever, name, description):
+    """Polyfill for create_retriever_tool since import is failing/deprecated."""
+    def retrieve(query: str):
+        docs = retriever.invoke(query)
+        return "\n\n".join([doc.page_content for doc in docs])
+    
+    return Tool(
+        name=name,
+        func=retrieve,
+        description=description
+    )
 
 from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.agents import create_tool_calling_agent, AgentExecutor
-from langchain_core.messages import HumanMessage, AIMessage
+from langgraph.prebuilt import create_react_agent
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 
 # Initialize App
 app = FastAPI()
@@ -42,11 +55,13 @@ def get_vector_store():
         embedding = get_embeddings()
         
         # Load default docs
-        # Note: Paths are relative to the runtime root. In Vercel, it might vary.
-        # We try safe paths.
         base_path = os.path.dirname(os.path.abspath(__file__))
         docs_path = os.path.join(base_path, "all_docs")
         
+        # Ensure path exists
+        if not os.path.exists(docs_path):
+            os.makedirs(docs_path, exist_ok=True)
+            
         pdf_files = [
             os.path.join(docs_path, "AB-PMJAY.pdf"),
             os.path.join(docs_path, "ayushman_bharat.pdf"),
@@ -98,68 +113,71 @@ async def chat(request: ChatRequest):
         # LLM
         llm = ChatGroq(
             groq_api_key=os.getenv("GROQ_API_KEY"),
-            model_name="openai/gpt-oss-20b", # Keeping user's model name
+            model_name="openai/gpt-oss-20b",
             temperature=0
         )
         
-        prompt = ChatPromptTemplate.from_messages([
-            (
-                "system",
-                "You are an AI Health Policy Assistant for India. "
-                "Always use the PDF retriever first. "
-                "Explain in simple language. "
-                "If information is not found, say you are unsure."
-            ),
-            ("placeholder", "{chat_history}"),
-            ("human", "{input}"),
-            ("placeholder", "{agent_scratchpad}")
-        ])
+        system_msg = (
+            "You are an AI Health Policy Assistant for India. "
+            "Always use the PDF retriever first. "
+            "Explain in simple language. "
+            "If information is not found, say you are unsure."
+        )
         
-        agent = create_tool_calling_agent(llm, tools, prompt)
-        agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+        # Create Agent (LangGraph) - using generic setup for compatibility
+        agent_executor = create_react_agent(llm, tools)
         
         # Format History
-        chat_history = []
+        # Add System Message at the start
+        messages = [SystemMessage(content=system_msg)]
+        
         for msg in request.history:
             if msg['role'] == 'user':
-                chat_history.append(HumanMessage(content=msg['content']))
+                messages.append(HumanMessage(content=msg['content']))
             elif msg['role'] == 'assistant':
-                chat_history.append(AIMessage(content=msg['content']))
+                messages.append(AIMessage(content=msg['content']))
+        
+        # Add current message
+        messages.append(HumanMessage(content=request.message))
         
         # Run
-        result = agent_executor.invoke({
-            "input": request.message,
-            "chat_history": chat_history
-        })
+        result = agent_executor.invoke({"messages": messages})
         
-        return {"response": result['output']}
+        # Extract last message content
+        last_msg = result["messages"][-1]
+        response_text = last_msg.content
+        
+        return {"response": response_text}
         
     except Exception as e:
         print(f"Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/upload")
 async def upload_file(files: List[UploadFile] = File(...)):
     try:
-        # Note: This updates the in-memory DB only for this container instance.
-        # It won't persist across fresh cold starts or other containers.
         global VECTOR_DB
         if VECTOR_DB is None:
             get_vector_store()
             
         new_docs = []
         for file in files:
-            # Save to temp
             temp_path = f"/tmp/{file.filename}"
+            # Ensure folder exists
+            try:
+                os.makedirs(os.path.dirname(temp_path), exist_ok=True)
+            except:
+                # Fallback to local
+                temp_path = file.filename
+                
             with open(temp_path, "wb") as f:
                 content = await file.read()
                 f.write(content)
             
             loader = PyPDFLoader(temp_path)
             new_docs.extend(loader.load())
-            
-            # Cleanup? Maybe keep for a bit.
-            # os.remove(temp_path) 
             
         if new_docs:
             embedding = get_embeddings()
@@ -171,3 +189,13 @@ async def upload_file(files: List[UploadFile] = File(...)):
             
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ---------------- LOCAL DEV SERVER ----------------
+from fastapi.staticfiles import StaticFiles
+
+# Mount the root directory to serve index.html
+try:
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    app.mount("/", StaticFiles(directory=root_dir, html=True), name="static")
+except Exception as e:
+    print(f"Static mount failed: {e}")
