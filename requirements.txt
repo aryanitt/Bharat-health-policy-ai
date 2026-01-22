@@ -2,8 +2,9 @@ langchain
 langchain-openai
 langchain-core
 langchain_community
-
-streamlit
+fastapi
+uvicorn
+python-multipart
 langchainhub
 wikipedia
 arxiv

@@ -1,58 +1,30 @@
 # 🩺 Bharat Health Policy Genius – AI Assistant
 
-Bharat Health Policy Genius is an AI-powered assistant designed to help users understand India’s key health schemes such as **Ayushman Bharat**, **PM-JAY**, and **National Health Mission**.  
-It uses **RAG (Retrieval-Augmented Generation)** with official government PDFs to provide accurate, reliable answers.
+Bharat Health Policy Genius is an AI-powered assistant designed to help users understand India’s key health schemes.
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/aryanitt/Bharat-health-policy-ai)
-
----
-
-## 📸 Project Preview
-![App Screenshot](images/image.png)
-
----
+**Architecture:**
+- **Frontend**: HTML/CSS/JS (Static, Premium UI)
+- **Backend**: FastAPI (Python Serverless Function)
+- **Deployment**: Vercel Native
 
 ## 🚀 Features
 - 🤖 Smart AI Chat Assistant  
-- 📚 Answers from Official Indian Health Policy PDFs  
-- 🌐 Wikipedia & Arxiv support  
-- 📤 Upload your own PDF documents  
-- 🧠 Chat memory (previous chats stay)  
-- ⚡ Fast & beautiful Streamlit UI  
-
----
-
-## 🛠️ Tech Stack
-- Python  
-- Streamlit  
-- LangChain  
-- FAISS Vector Search  
-- HuggingFace Embeddings  
-- Groq LLM  
-- PDF RAG  
-
----
+- 📚 RAG with Official Government PDFs  
+- ⚡ Serverless Architecture  
 
 ## 📂 Project Structure
-NGO/
-├── all_docs/
-│ ├── AB-PMJAY.pdf
-│ ├── ayushman_bharat.pdf
-│ ├── NHM_more_information.pdf
-│ ├── PM-JAY.pdf
-├── images/
-│ ├── image.png
-├── app.py
-├── README.md
-├── requirements.txt
-├── .env
+```
+/api          # Python Backend (FastAPI)
+  /all_docs   # PDF Documents
+  index.py    # Main API Logic
+index.html    # Frontend Entry
+style.css     # Premium Styles
+script.js     # Frontend Logic
+vercel.json   # Deployment Config
+requirements.txt # Python Dependencies
+```
 
-🧠 How It Works
-
-1️⃣ Loads Indian health policy PDFs
-2️⃣ Splits text + creates embeddings
-3️⃣ Stores in FAISS vector DB
-4️⃣ Retrieves best relevant chunks
-5️⃣ AI explains answers clearly"# bharat-health-policy-ai" 
-"# bharat-health-policy-ai" 
-"# aryanitt-bharat-health-policy-ai" 
+## 🛠️ Local Development
+1. Install dependencies: `pip install -r requirements.txt`
+2. Run Backend: `uvicorn api.index:app --reload`
+3. Serve Frontend: Open `index.html` in browser (or use Live Server).
