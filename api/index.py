@@ -7,46 +7,22 @@ from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_huggingface import HuggingFaceEmbeddings
-
-from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper
-from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun
-# Polyfill for create_retriever_tool
-from langchain_core.tools import Tool
-
-def create_retriever_tool(retriever, name, description):
-    """Polyfill for create_retriever_tool since import is failing/deprecated."""
-    def retrieve(query: str):
-        docs = retriever.invoke(query)
-        return "\n\n".join([doc.page_content for doc in docs])
-    
-    return Tool(
-        name=name,
-        func=retrieve,
-        description=description
-    )
-
-from langchain_groq import ChatGroq
-from langchain_core.prompts import ChatPromptTemplate
-from langgraph.prebuilt import create_react_agent
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-
-# Initialize App
-app = FastAPI()
-load_dotenv()
-
-# Global State (Note: In serverless, this persists only for warm containers)
-VECTOR_DB = None
-EMBEDDINGS = None
-
-class ChatRequest(BaseModel):
-    message: str
-    history: List[dict] # [{"role": "user", "content": "hi"}, ...]
+# from langchain_huggingface import HuggingFaceEmbeddings # Removed to save space
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 
 def get_embeddings():
     global EMBEDDINGS
     if EMBEDDINGS is None:
-        EMBEDDINGS = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        # Use API based embeddings (Lightweight)
+        # Note: Requires HUGGINGFACEHUB_API_TOKEN env var
+        api_key = os.getenv("HUGGINGFACEHUB_API_TOKEN")
+        if not api_key:
+            print("WARNING: HUGGINGFACEHUB_API_TOKEN missing. Embeddings will fail.")
+            
+        EMBEDDINGS = HuggingFaceInferenceAPIEmbeddings(
+            api_key=api_key or "hf_dummy", # Prevent crash on startup, but will fail query if invalid
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
+        )
     return EMBEDDINGS
 
 def get_vector_store():

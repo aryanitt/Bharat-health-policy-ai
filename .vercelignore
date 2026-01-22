@@ -1,0 +1,17 @@
+# Vercel Ignore
+.git
+.gitignore
+*.pyc
+__pycache__
+venv
+.venv
+node_modules
+.env
+*.ipynb
+
+# Large documentation files (using api/all_docs instead)
+all_docs/
+data/
+
+# Tests
+tests/
