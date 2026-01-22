@@ -9,6 +9,12 @@ from langchain_community.vectorstores import FAISS
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 # from langchain_huggingface import HuggingFaceEmbeddings # Removed to save space
 from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_groq import ChatGroq
+from langchain_community.tools import WikipediaQueryRun, ArxivQueryRun
+from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
+from langchain.agents import create_react_agent, AgentExecutor
+from langchain.tools.retriever import create_retriever_tool
+from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 def get_embeddings():
     global EMBEDDINGS
@@ -41,8 +47,7 @@ def get_vector_store():
         pdf_files = [
             os.path.join(docs_path, "AB-PMJAY.pdf"),
             os.path.join(docs_path, "ayushman_bharat.pdf"),
-            os.path.join(docs_path, "NHM_more_information.pdf"),
-            os.path.join(docs_path, "PM-JAY.pdf")
+            os.path.join(docs_path, "NHM_more_information.pdf")
         ]
         
         all_docs = []
