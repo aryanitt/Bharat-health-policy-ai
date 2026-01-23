@@ -27,10 +27,14 @@ class ChatRequest(BaseModel):
     history: List[dict] = []
 
 def get_embeddings():
-    from langchain_google_genai import GoogleGenerativeAIEmbeddings
+    from langchain_community.embeddings import FastEmbedEmbeddings
     global EMBEDDINGS
     if EMBEDDINGS is None:
-        EMBEDDINGS = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+        # FastEmbed is lightweight (ONNX) and doesn't require API keys or PyTorch
+        EMBEDDINGS = FastEmbedEmbeddings(
+            model_name="BAAI/bge-small-en-v1.5",
+            cache_dir="/tmp"  # Required for Vercel/Serverless
+        )
     return EMBEDDINGS
 
 def get_vector_store():

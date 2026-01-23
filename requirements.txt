@@ -10,4 +10,4 @@ arxiv
 pypdf
 faiss-cpu
 langchain-groq
-langchain-google-genai
+fastembed
