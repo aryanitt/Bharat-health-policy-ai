@@ -42,10 +42,14 @@ body {
     color: var(--text-main);
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    /* Default: Allow scroll */
+}
+
+/* Specific fix for Chat Page to be static/fixed height */
+body.chat-page {
     height: 100vh;
-    /* Fixed height */
     overflow: hidden;
-    /* Prevent page scroll */
 }
 
 a {
