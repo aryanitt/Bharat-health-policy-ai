@@ -27,10 +27,10 @@ class ChatRequest(BaseModel):
     history: List[dict] = []
 
 def get_embeddings():
-    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_google_genai import GoogleGenerativeAIEmbeddings
     global EMBEDDINGS
     if EMBEDDINGS is None:
-        EMBEDDINGS = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+        EMBEDDINGS = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
     return EMBEDDINGS
 
 def get_vector_store():
