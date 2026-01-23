@@ -8,6 +8,5 @@ python-dotenv
 wikipedia
 arxiv
 pypdf
-faiss-cpu
+rank_bm25
 langchain-groq
-fastembed
