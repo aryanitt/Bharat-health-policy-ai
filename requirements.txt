@@ -12,3 +12,6 @@ faiss-cpu
 langchain-groq
 huggingface_hub
 langchain-text-splitters
+langchain-huggingface
+
+langchain-google-genai

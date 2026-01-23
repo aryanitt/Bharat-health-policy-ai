@@ -9,12 +9,11 @@ from dotenv import load_dotenv
 # from langchain_community.vectorstores import FAISS
 # from langchain_text_splitters import RecursiveCharacterTextSplitter
 # from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
-# from langchain_groq import ChatGroq
-# from langchain_community.tools import WikipediaQueryRun, ArxivQueryRun
 # from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
 # from langchain.agents import create_react_agent, AgentExecutor
 # from langchain.tools.retriever import create_retriever_tool
 # from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+# from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings, GoogleGenerativeAIEmbeddings
 
 load_dotenv()
 
@@ -40,19 +39,11 @@ class ChatRequest(BaseModel):
 
 
 def get_embeddings():
-    from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+    from langchain_huggingface import HuggingFaceEmbeddings
     global EMBEDDINGS
     if EMBEDDINGS is None:
-        # Use API based embeddings (Lightweight)
-        # Note: Requires HUGGINGFACEHUB_API_TOKEN env var
-        api_key = os.getenv("HUGGINGFACEHUB_API_TOKEN")
-        if not api_key:
-            print("WARNING: HUGGINGFACEHUB_API_TOKEN missing. Embeddings will fail.")
-            
-        EMBEDDINGS = HuggingFaceInferenceAPIEmbeddings(
-            api_key=api_key or "hf_dummy", # Prevent crash on startup, but will fail query if invalid
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
-        )
+        # Use HuggingFace Embeddings
+        EMBEDDINGS = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     return EMBEDDINGS
 
 def get_vector_store():
@@ -98,10 +89,12 @@ def health_check():
 async def chat(request: ChatRequest):
     from langchain_community.tools import WikipediaQueryRun, ArxivQueryRun
     from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
-    from langchain.agents import create_react_agent, AgentExecutor
-    from langchain.tools.retriever import create_retriever_tool
+    from langgraph.prebuilt import create_react_agent
+    from langchain_core.tools import create_retriever_tool
     from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-    from langchain_groq import ChatGroq
+    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_google_genai import ChatGoogleGenerativeAI
+
     try:
         vectordb = get_vector_store()
         
@@ -124,10 +117,10 @@ async def chat(request: ChatRequest):
             )
             tools.append(retriever_tool)
         
-        # LLM
-        llm = ChatGroq(
-            groq_api_key=os.getenv("GROQ_API_KEY"),
-            model_name="llama3-8b-8192",
+        # LLM (Gemini)
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-1.5-flash",
+            google_api_key=os.getenv("GOOGLE_API_KEY"),
             temperature=0
         )
         
@@ -166,6 +159,9 @@ async def chat(request: ChatRequest):
     except Exception as e:
         print(f"Error: {str(e)}")
         import traceback
+        with open("error.log", "w") as f:
+            f.write(str(e) + "\n")
+            traceback.print_exc(file=f)
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -215,3 +211,5 @@ try:
     app.mount("/", StaticFiles(directory=root_dir, html=True), name="static")
 except Exception as e:
     print(f"Static mount failed: {e}")
+
+# Reload trigger
