@@ -42,7 +42,10 @@ body {
     color: var(--text-main);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
+    /* Fixed height */
+    overflow: hidden;
+    /* Prevent page scroll */
 }
 
 a {

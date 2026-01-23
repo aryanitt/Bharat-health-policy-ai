@@ -71,11 +71,11 @@ async def chat(request: ChatRequest):
     from langgraph.prebuilt import create_react_agent
     from langchain_core.tools import create_retriever_tool
     from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-    from langchain_google_genai import ChatGoogleGenerativeAI
+    from langchain_groq import ChatGroq
 
     try:
-        if not os.getenv("GOOGLE_API_KEY"):
-            raise RuntimeError("GOOGLE_API_KEY not set")
+        if not os.getenv("GROQ_API_KEY"):
+            raise RuntimeError("GROQ_API_KEY not set")
 
         vectordb = get_vector_store()
 
@@ -107,10 +107,10 @@ async def chat(request: ChatRequest):
             )
             tools.append(retriever_tool)
 
-        # -------- LLM (UPDATED) --------
-        llm = ChatGoogleGenerativeAI(
-            model="gemini-2.5-flash-lite",
-            google_api_key=os.getenv("GOOGLE_API_KEY"),
+        # -------- LLM (GROQ) --------
+        llm = ChatGroq(
+            model="llama-3.1-8b-instant",
+            api_key=os.getenv("GROQ_API_KEY"),
             temperature=0
         )
 
