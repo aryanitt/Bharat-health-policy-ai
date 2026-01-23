@@ -3,23 +3,12 @@ from pydantic import BaseModel
 from typing import List, Optional
 import os
 from dotenv import load_dotenv
-
-# Imports moved to functions for lazy loading
-# from langchain_community.document_loaders import PyPDFLoader
-# from langchain_community.vectorstores import FAISS
-# from langchain_text_splitters import RecursiveCharacterTextSplitter
-# from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
-# from langchain_community.utilities import WikipediaAPIWrapper, ArxivAPIWrapper
-# from langchain.agents import create_react_agent, AgentExecutor
-# from langchain.tools.retriever import create_retriever_tool
-# from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-# from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings, GoogleGenerativeAIEmbeddings
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 load_dotenv()
 
 app = FastAPI()
-
-from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
@@ -37,12 +26,10 @@ class ChatRequest(BaseModel):
     message: str
     history: List[dict] = []
 
-
 def get_embeddings():
     from langchain_huggingface import HuggingFaceEmbeddings
     global EMBEDDINGS
     if EMBEDDINGS is None:
-        # Use HuggingFace Embeddings
         EMBEDDINGS = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     return EMBEDDINGS
 
@@ -53,32 +40,24 @@ def get_vector_store():
     global VECTOR_DB
     if VECTOR_DB is None:
         embedding = get_embeddings()
-        
-        # Load default docs
         base_path = os.path.dirname(os.path.abspath(__file__))
         docs_path = os.path.join(base_path, "all_docs")
-        
-        # Ensure path exists
         if not os.path.exists(docs_path):
             os.makedirs(docs_path, exist_ok=True)
-            
         pdf_files = [
             os.path.join(docs_path, "AB-PMJAY.pdf"),
             os.path.join(docs_path, "ayushman_bharat.pdf"),
             os.path.join(docs_path, "NHM_more_information.pdf")
         ]
-        
         all_docs = []
         for pdf_path in pdf_files:
             if os.path.exists(pdf_path):
                 loader = PyPDFLoader(pdf_path)
                 all_docs.extend(loader.load())
-        
         if all_docs:
             splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             chunks = splitter.split_documents(all_docs)
             VECTOR_DB = FAISS.from_documents(chunks, embedding)
-    
     return VECTOR_DB
 
 @app.get("/api/health")
@@ -92,76 +71,79 @@ async def chat(request: ChatRequest):
     from langgraph.prebuilt import create_react_agent
     from langchain_core.tools import create_retriever_tool
     from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-    from langchain_huggingface import HuggingFaceEmbeddings
     from langchain_google_genai import ChatGoogleGenerativeAI
 
     try:
+        if not os.getenv("GOOGLE_API_KEY"):
+            raise RuntimeError("GOOGLE_API_KEY not set")
+
         vectordb = get_vector_store()
-        
-        # Tools
+
+        # -------- TOOLS --------
+        tools = []
+
         wiki = WikipediaQueryRun(
-            api_wrapper=WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=400)
+            api_wrapper=WikipediaAPIWrapper(
+                top_k_results=1,
+                doc_content_chars_max=400
+            )
         )
+        tools.append(wiki)
+
         arxiv = ArxivQueryRun(
-            api_wrapper=ArxivAPIWrapper(top_k_results=1, doc_content_chars_max=300)
+            api_wrapper=ArxivAPIWrapper(
+                top_k_results=1,
+                doc_content_chars_max=300
+            )
         )
-        
-        tools = [wiki, arxiv]
-        
+        tools.append(arxiv)
+
         if vectordb:
-            retriever = vectordb.as_retriever()
+            retriever = vectordb.as_retriever(search_kwargs={"k": 4})
             retriever_tool = create_retriever_tool(
                 retriever,
                 "health_policy_scheme_search",
                 "Search official Indian health policy PDFs like PM-JAY, NHM"
             )
             tools.append(retriever_tool)
-        
-        # LLM (Gemini)
+
+        # -------- LLM (UPDATED) --------
         llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",
+            model="gemini-2.5-flash-lite",
             google_api_key=os.getenv("GOOGLE_API_KEY"),
             temperature=0
         )
-        
-        system_msg = (
-            "You are an AI Health Policy Assistant for India. "
-            "Always use the PDF retriever first. "
-            "Explain in simple language. "
-            "If information is not found, say you are unsure."
+
+        system_msg = SystemMessage(
+            content=(
+                "You are an AI Health Policy Assistant for India. "
+                "Always use the PDF retriever first. "
+                "Explain in simple language. "
+                "If information is not found, say you are unsure."
+            )
         )
-        
-        # Create Agent (LangGraph) - using generic setup for compatibility
-        agent_executor = create_react_agent(llm, tools)
-        
-        # Format History
-        # Add System Message at the start
-        messages = [SystemMessage(content=system_msg)]
-        
+
+        agent = create_react_agent(llm, tools)
+
+        # -------- HISTORY --------
+        messages = [system_msg]
+
         for msg in request.history:
-            if msg['role'] == 'user':
-                messages.append(HumanMessage(content=msg['content']))
-            elif msg['role'] == 'assistant':
-                messages.append(AIMessage(content=msg['content']))
-        
-        # Add current message
+            if msg["role"] == "user":
+                messages.append(HumanMessage(content=msg["content"]))
+            elif msg["role"] == "assistant":
+                messages.append(AIMessage(content=msg["content"]))
+
         messages.append(HumanMessage(content=request.message))
-        
-        # Run
-        result = agent_executor.invoke({"messages": messages})
-        
-        # Extract last message content
-        last_msg = result["messages"][-1]
-        response_text = last_msg.content
-        
-        return {"response": response_text}
-        
+
+        result = agent.invoke({"messages": messages})
+
+        return {
+            "response": result["messages"][-1].content
+        }
+
     except Exception as e:
-        print(f"Error: {str(e)}")
         import traceback
-        with open("error.log", "w") as f:
-            f.write(str(e) + "\n")
-            traceback.print_exc(file=f)
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -173,43 +155,31 @@ async def upload_file(files: List[UploadFile] = File(...)):
         global VECTOR_DB
         if VECTOR_DB is None:
             get_vector_store()
-            
         new_docs = []
         for file in files:
             temp_path = f"/tmp/{file.filename}"
-            # Ensure folder exists
             try:
                 os.makedirs(os.path.dirname(temp_path), exist_ok=True)
             except:
-                # Fallback to local
                 temp_path = file.filename
-                
             with open(temp_path, "wb") as f:
                 content = await file.read()
                 f.write(content)
-            
             loader = PyPDFLoader(temp_path)
             new_docs.extend(loader.load())
-            
         if new_docs:
             embedding = get_embeddings()
             splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             chunks = splitter.split_documents(new_docs)
             VECTOR_DB.add_documents(chunks)
-            
         return {"status": "success", "message": "Files processed (Memory Only)"}
-            
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 # ---------------- LOCAL DEV SERVER ----------------
-from fastapi.staticfiles import StaticFiles
-
 # Mount the root directory to serve index.html
 try:
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     app.mount("/", StaticFiles(directory=root_dir, html=True), name="static")
 except Exception as e:
     print(f"Static mount failed: {e}")
-
-# Reload trigger
