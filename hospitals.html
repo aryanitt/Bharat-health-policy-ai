@@ -20,13 +20,34 @@
         </div>
     </section>
 
-    <div class="features-section" style="text-align: center; padding: 100px 20px;">
-        <div class="icon-box" style="font-size: 64px; color: var(--text-muted); margin-bottom: 20px;"><ion-icon
-                name="map-outline"></ion-icon></div>
-        <h2>Coming Soon</h2>
-        <p>This feature will allow you to search hospitals by State and District.</p>
-        <a href="https://hospitals.pmjay.gov.in/Search/" target="_blank" class="btn btn-primary"
-            style="margin-top: 20px;">Visit Official PM-JAY Search</a>
+    <div class="features-section">
+        <div
+            style="max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+
+            <!-- Online Search Card -->
+            <div class="feature-card" style="text-align: center; padding: 40px;">
+                <div class="icon-box"><ion-icon name="globe-outline"></ion-icon></div>
+                <h3>Search Online</h3>
+                <p style="margin-bottom: 24px;">Find empaneled hospitals by State, District, and Specialty on the
+                    official portal.</p>
+                <a href="https://hospitals.pmjay.gov.in/Search/" target="_blank" class="btn btn-primary"
+                    style="width: 100%; justify-content: center;">
+                    Open Search Portal <ion-icon name="open-outline" style="margin-left: 8px;"></ion-icon>
+                </a>
+            </div>
+
+            <!-- Helpline Card -->
+            <div class="feature-card" style="text-align: center; padding: 40px;">
+                <div class="icon-box"><ion-icon name="call-outline"></ion-icon></div>
+                <h3>Call Helpline</h3>
+                <p style="margin-bottom: 24px;">Need help finding a hospital? Call the National Toll-Free Helpline.</p>
+                <a href="tel:14555" class="btn btn-secondary"
+                    style="width: 100%; justify-content: center; border-color: var(--primary); color: var(--primary);">
+                    <ion-icon name="call" style="margin-right: 8px;"></ion-icon> Call 14555
+                </a>
+            </div>
+
+        </div>
     </div>
 
     <script src="js/nav.js"></script>

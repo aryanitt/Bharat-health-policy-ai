@@ -102,6 +102,23 @@ quickQuestions.forEach(btn => {
     });
 });
 
+// Mobile Sidebar Toggle
+const sidebarToggleBtn = document.getElementById('sidebar-toggle-btn');
+const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+const chatSidebar = document.getElementById('chat-sidebar');
+
+if (sidebarToggleBtn && chatSidebar) {
+    sidebarToggleBtn.addEventListener('click', () => {
+        chatSidebar.classList.add('show');
+    });
+}
+
+if (closeSidebarBtn && chatSidebar) {
+    closeSidebarBtn.addEventListener('click', () => {
+        chatSidebar.classList.remove('show');
+    });
+}
+
 // File Upload Logic
 const uploadBtn = document.getElementById('upload-btn-trigger');
 const fileInput = document.getElementById('pdf-upload');

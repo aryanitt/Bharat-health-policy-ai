@@ -20,15 +20,124 @@
         </div>
     </section>
 
-    <div class="features-section" style="text-align: center; padding: 100px 20px;">
-        <div class="icon-box" style="font-size: 64px; color: var(--text-muted); margin-bottom: 20px;"><ion-icon
-                name="construct-outline"></ion-icon></div>
-        <h2>Under Construction</h2>
-        <p>We are building a smart checker linked to the SECC 2011 database rules.</p>
-        <a href="chat.html" class="btn btn-primary" style="margin-top: 20px;">Ask AI Instead</a>
+    <div class="features-section">
+        <div id="eligibility-container"
+            style="max-width: 800px; margin: 0 auto; background: var(--bg-card); padding: 30px; border-radius: 12px; border: 1px solid var(--border);">
+
+            <!-- Questionnaire Form -->
+            <form id="eligibility-form">
+                <div class="form-header" style="text-align: center; margin-bottom: 30px;">
+                    <h2>Simplified Eligibility Checker</h2>
+                    <p style="color: var(--text-muted);">Answer these simple questions to know if you might qualify.</p>
+                </div>
+
+                <!-- Q1 -->
+                <div class="question-group">
+                    <label>1. Do you own a motorized 2/3/4 wheeler or fishing boat?</label>
+                    <div class="options">
+                        <label class="radio-card">
+                            <input type="radio" name="vehicle" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="vehicle" value="no" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q2 -->
+                <div class="question-group">
+                    <label>2. Do you own mechanized agricultural equipment (3/4 wheeler)?</label>
+                    <div class="options">
+                        <label class="radio-card">
+                            <input type="radio" name="equipment" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="equipment" value="no" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q3 -->
+                <div class="question-group">
+                    <label>3. Do you have a Kisan Credit Card with a limit over ₹50,000?</label>
+                    <div class="options">
+                        <label class="radio-card">
+                            <input type="radio" name="kcc" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="kcc" value="no" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q4 -->
+                <div class="question-group">
+                    <label>4. Is anyone in your family a government employee?</label>
+                    <div class="options">
+                        <label class="radio-card">
+                            <input type="radio" name="gov-job" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="gov-job" value="no" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q5 -->
+                <div class="question-group">
+                    <label>5. Does your household earn more than ₹10,000 per month?</label>
+                    <div class="options">
+                        <label class="radio-card">
+                            <input type="radio" name="income" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="income" value="no" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Q6 -->
+                <div class="question-group">
+                    <label>6. Do you pay income tax or professional tax?</label>
+                    <div class="options">
+                        <label class="radio-card">
+                            <input type="radio" name="tax" value="yes">
+                            <span>Yes</span>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="tax" value="no" checked>
+                            <span>No</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions" style="margin-top: 30px; text-align: center;">
+                    <button type="button" id="check-eligibility-btn" class="btn btn-primary"
+                        style="padding: 14px 40px; font-size: 16px;">Check My Status</button>
+                    <p style="margin-top: 12px; font-size: 12px; color: var(--text-muted);">* This is an indicative tool
+                        based on government exclusion criteria.</p>
+                </div>
+            </form>
+
+            <!-- Result Section (Hidden initially) -->
+            <div id="result-section" class="hidden">
+                <div id="result-content"></div>
+            </div>
+        </div>
     </div>
 
     <script src="js/nav.js"></script>
+    <script src="js/eligibility.js"></script>
 </body>
 
 </html>

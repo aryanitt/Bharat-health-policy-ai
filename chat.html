@@ -17,10 +17,13 @@
 <body class="chat-page">
     <div class="app-container">
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="chat-sidebar">
             <div class="logo-area">
                 <span class="icon">🩺</span>
                 <h1>Health Policy AI</h1>
+                <button class="close-sidebar mobile-only" id="close-sidebar-btn">
+                    <ion-icon name="close-outline"></ion-icon>
+                </button>
             </div>
 
             <div class="nav-section">
@@ -47,7 +50,12 @@
         <!-- Main Chat -->
         <main class="chat-area">
             <header class="chat-header">
-                <h2>Bharat Health Policy Genius</h2>
+                <div class="header-top">
+                    <button class="menu-toggle mobile-only" id="sidebar-toggle-btn">
+                        <ion-icon name="menu-outline"></ion-icon>
+                    </button>
+                    <h2>Bharat Health Policy Genius</h2>
+                </div>
                 <p>AI Assistant for Indian Health Schemes (AB-PMJAY, NHM)</p>
             </header>
 

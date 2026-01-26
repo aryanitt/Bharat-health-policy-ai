@@ -31,13 +31,15 @@ function renderVideos(videos) {
     if (!container) return;
 
     container.innerHTML = videos.map(v => `
-        <div class="video-card feature-card" style="text-align: left; padding: 0; overflow: hidden;">
-            <div class="video-thumbnail" style="height: 180px; background: #000; position: relative;">
-                <img src="https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg" style="width: 100%; height: 100%; object-fit: cover;">
-                <a href="https://www.youtube.com/watch?v=${v.youtube_id}" target="_blank" class="play-btn" style="position: absolute; top:50%; left:50%; transform:translate(-50%, -50%); color: white; font-size: 48px;"><ion-icon name="play-circle"></ion-icon></a>
+        <div class="video-card feature-card">
+            <div class="video-thumbnail">
+                <img src="https://img.youtube.com/vi/${v.youtube_id}/hqdefault.jpg" alt="${v.title}">
+                <a href="https://www.youtube.com/watch?v=${v.youtube_id}" target="_blank" class="play-btn">
+                    <ion-icon name="play-circle"></ion-icon>
+                </a>
             </div>
-            <div class="video-info" style="padding: 20px;">
-                <span class="tag" style="background: #eff6ff; color: var(--primary); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;">${v.lang}</span>
+            <div class="video-info">
+                <span class="tag">${v.lang}</span>
                 <h3 style="margin: 12px 0; font-size: 16px;">${v.title}</h3>
                 <p style="font-size: 13px; color: var(--text-muted);">${v.description}</p>
             </div>
@@ -50,20 +52,20 @@ function renderSchemes(schemes) {
     if (!container) return;
 
     container.innerHTML = schemes.map(s => `
-        <div class="scheme-card feature-card" style="text-align: left; margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <h3 style="color: var(--primary); font-size: 20px;">${s.name}</h3>
-                <span style="background: #ecfdf5; color: #059669; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">Active</span>
+        <div class="scheme-card feature-card">
+            <div class="scheme-header">
+                <h3>${s.name}</h3>
+                <span class="status-badge">Active</span>
             </div>
             <p style="margin: 12px 0;">${s.description}</p>
             
-            <div class="scheme-meta" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;">
+            <div class="scheme-meta">
                 <div>
-                    <strong style="display: block; font-size: 12px; color: var(--text-muted);">COVERAGE</strong>
+                    <span class="meta-label">COVERAGE</span>
                     <span>${s.coverage}</span>
                 </div>
                 <div>
-                    <strong style="display: block; font-size: 12px; color: var(--text-muted);">BENEFICIARIES</strong>
+                    <span class="meta-label">BENEFICIARIES</span>
                     <span>${s.beneficiaries}</span>
                 </div>
             </div>
