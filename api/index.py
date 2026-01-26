@@ -31,13 +31,19 @@ def get_retriever():
     from langchain_community.retrievers import BM25Retriever
     from langchain_text_splitters import RecursiveCharacterTextSplitter
     
+            
     global RETRIEVER
     if RETRIEVER is None:
         base_path = os.path.dirname(os.path.abspath(__file__))
         docs_path = os.path.join(base_path, "all_docs")
-        if not os.path.exists(docs_path):
-            os.makedirs(docs_path, exist_ok=True)
         
+        # Ensure directory exists
+        if not os.path.exists(docs_path):
+            try:
+                os.makedirs(docs_path, exist_ok=True)
+            except OSError:
+                pass # Read-only file system on Vercel maybe?
+
         pdf_files = [
             os.path.join(docs_path, "AB-PMJAY.pdf"),
             os.path.join(docs_path, "ayushman_bharat.pdf"),
@@ -47,8 +53,11 @@ def get_retriever():
         all_docs = []
         for pdf_path in pdf_files:
             if os.path.exists(pdf_path):
-                loader = PyPDFLoader(pdf_path)
-                all_docs.extend(loader.load())
+                try:
+                    loader = PyPDFLoader(pdf_path)
+                    all_docs.extend(loader.load())
+                except Exception as e:
+                    print(f"Error loading {pdf_path}: {e}")
         
         if all_docs:
             splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)

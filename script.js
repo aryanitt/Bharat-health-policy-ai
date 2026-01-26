@@ -45,7 +45,8 @@ async function sendMessage(text) {
     try {
         // Send to Backend
         // We accept the delay (cold start) here
-        const response = await fetch('http://127.0.0.1:8000/api/chat', {
+        // Use relative path for Vercel deployment
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +125,7 @@ if (uploadBtn && fileInput) {
         }
 
         try {
-            const res = await fetch('http://127.0.0.1:8000/api/upload', {
+            const res = await fetch('/api/upload', {
                 method: 'POST',
                 body: formData
             });
