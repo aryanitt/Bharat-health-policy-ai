@@ -1,6 +1,6 @@
 import os
 from typing import List, Optional
-from api.config import GROQ_API_KEY, LLM_MODEL, TEMPERATURE
+from api.config import GOOGLE_API_KEY, LLM_MODEL, TEMPERATURE
 from api.services.rag_service import RAGService
 from api.models.chat import ChatMessage
 
@@ -48,16 +48,16 @@ class AgentService:
         from langchain.agents import create_tool_calling_agent, AgentExecutor
         from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
         from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-        from langchain_groq import ChatGroq
+        from langchain_google_genai import ChatGoogleGenerativeAI
         
-        if not GROQ_API_KEY:
-            raise RuntimeError("GROQ_API_KEY not set")
+        if not GOOGLE_API_KEY:
+            raise RuntimeError("GOOGLE_API_KEY not set")
 
         tools = cls.get_tools()
         
-        llm = ChatGroq(
+        llm = ChatGoogleGenerativeAI(
             model=LLM_MODEL,
-            api_key=GROQ_API_KEY,
+            google_api_key=GOOGLE_API_KEY,
             temperature=TEMPERATURE
         )
 

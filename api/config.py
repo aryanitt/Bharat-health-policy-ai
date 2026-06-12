@@ -10,8 +10,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DOCS_PATH = os.path.join(BASE_DIR, "all_docs")
 
 # API Keys
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
 # Model configurations
-LLM_MODEL = "llama-3.1-8b-instant"
+LLM_MODEL = "gemini-2.5-flash"
 TEMPERATURE = 0

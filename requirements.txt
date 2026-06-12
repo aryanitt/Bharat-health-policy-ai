@@ -1,6 +1,6 @@
-langchain
-langchain-core
-langchain-community
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-community>=0.2.0
 fastapi
 uvicorn
 python-multipart
@@ -9,4 +9,4 @@ wikipedia
 arxiv
 pypdf
 rank_bm25
-langchain-groq
+langchain-google-genai>=1.0.0
